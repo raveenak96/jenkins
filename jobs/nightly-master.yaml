@@ -1,0 +1,26 @@
+- job-template:
+    name: 'raveena-master-nightly-{compiler}'
+    triggers:
+        - timed: '@midnight'
+    scm:
+        - git:
+            url: https://github.com/DevOpTester/IBAMR.git
+            branches:
+                - '*/master'
+    builders:
+        - shell: |
+                umask 000
+                ccache -s
+                export HOME={sfwdir}
+                export BOOST_ROOT=$HOME/linux/boost/1.61.0
+                export PETSC_ARCH=linux-debug
+                export PETSC_DIR=$HOME/petsc/3.7.2
+                export GTEST_OUTPUT="xml:$WORKSPACE/"
+                export SAMRAI_DIR="$HOME/samrai/2.4.4/linux-debug"
+                export GSL_DIR=/srv/sfw/linux/gsl/2.3
+                rm -f config.cache
+                rm -f *.xml
+                ./.jenkins_fulltest
+    publishers:
+        - junit:
+            results: '*.xml'

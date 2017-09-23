@@ -1,0 +1,10 @@
+- project:
+    name: raveena-master-nightly
+    jobs:
+        - 'raveena-master-nightly-{compiler}'
+        - 'raveena-pr-{compiler}'
+    compiler:
+        - 'gcc':
+            sfwdir: '/srv/sfw'
+        - 'clang':
+            sfwdir: '/srv/LLVMsfw'
